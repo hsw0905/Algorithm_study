@@ -25,15 +25,15 @@ void freeList(arrayList_t *list)
 	free(list);
 }
 
-arrayList_t *expandList(arrayList_t *list)
+arrayList_t *doublingList(arrayList_t *list)
 {
 	int i;
 	arrayList_t *newList = (arrayList_t *)malloc(sizeof(arrayList_t));
 	newList->capacity = list->capacity * 2;
 	newList->length = list->length;
 	newList->pArray = malloc(sizeof(int) * newList->capacity);
-	newList->pArray = NULL;
 
+	printf("Initiating doublingList\n");
 	for (i = 0; i < newList->length; i++)
 	{
 		newList->pArray[i] = list->pArray[i];
@@ -95,9 +95,8 @@ int insert(arrayList_t *list, int data, int index)
 	if (isFull(list))
 	{
 		printf("Can't prepend data, list is full\n");
-		return 0;
 	}
-	else if (list->length < index)
+	if (list->length < index)
 	{
 		printf("Can't prepend data, out of index\n");
 		return 0;
@@ -106,7 +105,7 @@ int insert(arrayList_t *list, int data, int index)
 	{
 		for (i = list->length; i > index; i--)
 		{
-			list->pArray[i + 1] = list->pArray[i];
+			list->pArray[i] = list->pArray[i - 1];
 		}
 		list->pArray[index] = data;
 		list->length++;
@@ -115,7 +114,7 @@ int insert(arrayList_t *list, int data, int index)
 	}
 }
 
-int rmData(arrayList_t *list, int index)
+int removeData(arrayList_t *list, int index)
 {
 	int i;
 	if (list->length < index)
@@ -125,11 +124,11 @@ int rmData(arrayList_t *list, int index)
 	}
 	else
 	{
-		for (i = list->length; i > index; i--)
+		for (i = index; i < list->length; i++)
 		{
-			list->pArray[i - 1] = list->pArray[i];
+			list->pArray[i] = list->pArray[i + 1];
 		}
-		// list->pArray[list->length] = '\0';
+		list->pArray[list->length - 1] = '\0';
 		list->length--;
 
 		return 1;
@@ -150,15 +149,18 @@ void displayList(arrayList_t *list)
 
 int main()
 {
-	arrayList_t *mylist = createList(10);
+	arrayList_t *mylist = createList(4);
+	arrayList_t *expendedlist;
 	append(mylist, 1);
 	append(mylist, 2);
 	append(mylist, 3);
 	prepend(mylist, 4);
 	insert(mylist, 5, 2);
-	// todo : insert , remove
-	// insert(mylist, 6, 1);
-	// rmData(mylist, 1);
-	displayList(mylist);
-	freeList(mylist);
+	// doubling
+	expendedlist = doublingList(mylist);
+	insert(expendedlist, 6, 1);
+	removeData(expendedlist, 1);
+	removeData(expendedlist, 0);
+	displayList(expendedlist);
+	freeList(expendedlist);
 }
