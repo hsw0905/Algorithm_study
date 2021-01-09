@@ -1,12 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-
-typedef struct
-{
-	unsigned int length;
-	unsigned int capacity;
-	int *pArray;
-} arrayList_t;
+#include "arraylist.h"
 
 arrayList_t *createList(unsigned int capacity)
 {
@@ -145,22 +137,4 @@ void displayList(arrayList_t *list)
 	{
 		printf("array[%d]: %d\n", i, list->pArray[i]);
 	}
-}
-
-int main()
-{
-	arrayList_t *mylist = createList(4);
-	arrayList_t *expendedlist;
-	append(mylist, 1);
-	append(mylist, 2);
-	append(mylist, 3);
-	prepend(mylist, 4);
-	insert(mylist, 5, 2);
-	// doubling
-	expendedlist = doublingList(mylist);
-	insert(expendedlist, 6, 1);
-	removeData(expendedlist, 1);
-	removeData(expendedlist, 0);
-	displayList(expendedlist);
-	freeList(expendedlist);
 }
